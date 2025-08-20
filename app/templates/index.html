@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <style>
+        body{
+            text-align: center;
+            background-color: #f5ebe0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+        .results{
+          background-color: #d6ccc2;
+          text-align: justify;
+          width: 57%;
+          padding: 10px;
+          border-radius: 8px;
+        
+        }
+        h1,h3, h4, h2{
+            color: #6d6875;
+        }
+        .calif{
+          background-color: #e1c8b0;
+          width: 25%;
+          margin: 0 auto;
+          border-radius: 50% 10% 50% 10% / 10% 50% 10% 50%;
+        }
+    </style>
+</head>
+<body>  
+    <h1>Procesador de Examen</h1>
+
+     {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+          <li><strong>{{ category }}:</strong> {{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+
+    <div><h3>Para empezar a utilizar el programa es necesario calibrarlo subiendo la plantilla de 
+    tu examen con todas las respuestas marcadas en el inciso A</h3></div>
+    <div class="link"><a href="{{url_for('coords')}}"><button>Subir plantilla y Examen contestado</button></a></div>
+
+
+
+    <h3>ahora puedes subir tu examen a evaluar</h3>
+     <form method="POST" enctype="multipart/form-data">
+        <label>Sube tu examen: </label><br><br>
+        <input type="file" name="file">
+        <input type="submit" value="Subir">
+    </form><br>
+    <h3> Generar calificacion del examen</h3>
+    <form method="POST" action="{{ url_for('index') }}">
+      <input type="hidden" name="generate_result">
+      <input type="submit" value="Generar respuestas">
+    </form>
+    <h3>Ahora podras calificar el examen comparando con las respuestas dadas en la pagina de plantilla</h3>
+        <form method="POST" action="{{ url_for('calif') }}">
+      <input type="hidden" name="calif_exam">
+      <input type="submit" value="calificar">
+    </form>
+
+    <div class="calif">
+    <h2>Calificación del examen:</h2>
+    <h4 class="correctas">Respuestas correctas</h4>{{correctas}}
+    <h4 class="incorrectas">Respuestas incorrectas</h4>{{incorrectas}}
+    <h4 class="calificacion">La calificacion obtenida es:</h4>{{calificacion}} 
+    </div>
+</body>
+</html>

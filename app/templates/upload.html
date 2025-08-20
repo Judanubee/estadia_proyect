@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir plantilla de examen</title>
+    <style>
+      body{
+          text-align: center;
+          background-color: #f5ebe0;
+      }
+      h1,h3, h4 {
+            color: #6d6875;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Genera las coordenadas de tu examen</h1>
+    <h3>Para ello necesitas tener todos los incisos (A marcados en tu examen para una calibracion efectiva</h3>
+  
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+          <li><strong>{{ category }}:</strong> {{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <label>Sube tu plantilla</label><br>
+        <input type="file" name="plant">
+        <input type="submit" value="Subir">
+    </form><br>
+
+    <form method="POST" action="{{ url_for('coords') }}">
+      <label> Genera tus coordenadas </label>
+      <input type="hidden" name="generate_coords">
+      <input type="submit" value="Generar">
+    </form>
+
+      <h4>Despues tendras que subir tu examen con las respuestas correctas</h4>
+    <form action = "{{ url_for('ans') }}" method="POST" enctype="multipart/form-data">
+        <label>Sube tu examen</label><br>
+        <input type="file" name="correcto">
+        <input type="submit" value="Subir">
+    </form><br>
+
+    <form method="POST" action="{{ url_for('coords') }}">
+      <label> Genera tus respuestas correctas </label>
+      <input type="hidden" name="generate_ans">
+      <input type="submit" value="Generar"> 
+    </form><br>
+    <h3>Una vez generadas las respuestas correctas, podras evaluarlas</h3>
+    <a href="{{url_for('index')}}"><button>Regresar a la evaluacion</button></a>
+
+</body>
+</html>
